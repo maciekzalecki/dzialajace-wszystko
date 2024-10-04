@@ -1,0 +1,9 @@
+CREATE DATABASE wypozyczalnia;
+USE wypozyczalnia;
+CREATE TABLE filmy(
+    tytul VARCHAR(20) PRIMARY KEY,
+    rokProd INT(10),
+    rezyser VARCHAR(30),
+    czas INT(10),
+    nosniki INT(10)
+    );

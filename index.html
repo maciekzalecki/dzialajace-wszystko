@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Sklep - Logowanie, Rejestracja, Przypomnienie hasła</title>
+</head>
+<body>
+    <div class="container">
+        <br>
+        <h1 class="text-center">Sklep FILMEX</h1>
+        <br>
+
+      
+        <div class="d-flex justify-content-center">
+            <form id="loginForm" class="p-4 bg-dark text-white rounded" style="max-width: 400px; width: 100%;">
+                <h3>Logowanie</h3>
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="login-email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Hasło</label>
+                    <input type="password" class="form-control" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Zaloguj się</button>
+                <div id="login-message" class="mt-3"></div>
+                <div class="mt-2">
+                    <a href="forgot_password.php" class="text-white">Zapomniałeś hasła?</a>
+                </div>
+            </form>
+        </div>
+
+        
+        <div class="d-flex justify-content-center mt-4">
+            <form id="registerForm" class="p-4 bg-dark text-white rounded" style="max-width: 400px; width: 100%;">
+                <h3>Rejestracja</h3>
+                <div class="mb-3">
+                    <label for="register-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="register-email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="register-password" class="form-label">Hasło</label>
+                    <input type="password" class="form-control" id="register-password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+                <div id="register-message" class="mt-3"></div>
+            </form>
+        </div>
+        
+        
+        <div class="d-flex justify-content-center mt-4">
+            <form id="forgotPasswordForm" class="p-4 bg-dark text-white rounded" style="max-width: 400px; width: 100%;">
+                <h3>Przypomnienie hasła</h3>
+                <div class="mb-3">
+                    <label for="forgot-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="forgot-email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Przypomnij hasło</button>
+                <div id="forgot-message" class="mt-3"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
