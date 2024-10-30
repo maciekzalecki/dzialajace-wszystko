@@ -1,0 +1,89 @@
+<?php
+session_start();
+
+// Sprawdź, czy użytkownik jest zalogowany jako administrator
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: admin_login.php'); // Przekieruj na stronę logowania
+    exit();
+}
+
+// Połączenie z bazą danych
+$host = 'localhost'; // lub inny host
+$db = 'wypozyczalnia'; // zmień na nazwę swojej bazy danych
+$user = 'root'; // zmień na swojego użytkownika bazy danych
+$pass = ''; // zmień na swoje hasło
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo 'Błąd połączenia: ' . $e->getMessage();
+    exit();
+}
+
+// Sprawdź, czy podano ID podstrony do edycji
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    
+    // Pobierz dane podstrony
+    $stmt = $pdo->prepare("SELECT * FROM pages WHERE id = ?");
+    $stmt->execute([$id]);
+    $page = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$page) {
+        echo "Podstrona nie została znaleziona.";
+        exit();
+    }
+} else {
+    echo "ID podstrony nie zostało podane.";
+    exit();
+}
+
+// Zapisz zmiany, jeśli formularz został przesłany
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+
+    // Aktualizuj dane podstrony w bazie danych
+    $stmt = $pdo->prepare("UPDATE pages SET title = ?, content = ? WHERE id = ?");
+    $stmt->execute([$title, $content, $id]);
+
+    // Po zakończeniu aktualizacji przekieruj na stronę podstron
+    header('Location: admin_panel.php');
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Podstronę</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <header style="background-color: #333; color: white; padding: 15px; text-align: center;">
+        <h1 style="margin: 0;">Edytuj Podstronę</h1>
+    </header>
+
+    <main style="padding: 20px;">
+        <section style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 20px auto;">
+            <h2 style="text-align: center;">Edytuj: <?php echo htmlspecialchars($page['title']); ?></h2>
+            <form method="POST">
+                <label for="title">Tytuł:</label>
+                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($page['title']); ?>" required style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;">
+
+                <label for="content">Treść:</label>
+                <textarea id="content" name="content" rows="10" required style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;"><?php echo htmlspecialchars($page['content']); ?></textarea>
+
+                <button type="submit" style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Zapisz zmiany</button>
+                <a href="admin_panel.php" style="display: inline-block; background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 4px; text-decoration: none;">Anuluj</a>
+            </form>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 10px; background-color: #333; color: white; position: fixed; bottom: 0; width: 100%;">
+        <p>&copy; 2024 Twój Sklep. Wszelkie prawa zastrzeżone.</p>
+    </footer>
+</body>
+</html>
